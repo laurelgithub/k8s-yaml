@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - image: nginx
+        #command:
+        #- sh
+        #- -c
+        #- 'while true; do date > /mnt/index.html; hostname >> /mnt/index.html; sleep $(($RANDOM % 5 + 5)); done'
+        imagePullPolicy: IfNotPresent
+        name: nginx
+        volumeMounts:
+        - mountPath: /mnt
+          name: local-hostpath
+      # volumes:
+      # - name: local-hostpath
+      #   hostPath:
+      #     path: /test-local-volume
+      volumes:
+      - name: local-hostpath
+        persistentVolumeClaim:
+          claimName: local-calim

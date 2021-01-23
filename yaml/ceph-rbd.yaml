@@ -1,0 +1,40 @@
+# https://github.com/satanson/k8s_deploy/blob/master/cephrbd_storageclass.yaml
+# kubectl create -f cephrbd_storageclass.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cephrbd-secret
+  namespace: kube-system
+type: kubernetes.io/rbd
+data:
+  key: QVFEeGFIUmV0MklvRVJBQVJjRDZFSHprek56TXc2WmhtSWcvV2c9PQo=
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cephrbd-secret-user
+type: kubernetes.io/rbd
+data:
+  key: QVFEeGFIUmV0MklvRVJBQVJjRDZFSHprek56TXc2WmhtSWcvV2c9PQo=
+
+---
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: fast
+provisioner: kubernetes.io/rbd
+parameters:
+  monitors: 192.168.2.220:6789,192.168.2.220:6789,192.168.2.220:6789
+  adminId: admin
+  adminSecretName: cephrbd-secret
+  adminSecretNamespace: default
+  pool: kube
+  userId: admin
+  userSecretName: cephrbd-secret-user
+  userSecretNamespace: default
+  fsType: xfs
+  imageFormat: "2"
+  imageFeatures: "layering"

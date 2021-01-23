@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  # annotations:
+  #   cloud.google.com/load-balancer-type: Internal
+  name: mongo-0
+  namespace: mongo
+spec:
+  ports:
+  - port: 27017
+    targetPort: 27017
+  selector:
+    statefulset.kubernetes.io/pod-name: mongo-0
+    #role: mongo
+  type: LoadBalancer

@@ -1,0 +1,8 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: my-nfs-sc
+provisioner: mongo-nfs-storage
+parameters:
+  archiveOnDelete: "false"
+reclaimPolicy: Retain

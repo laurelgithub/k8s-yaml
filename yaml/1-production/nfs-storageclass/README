@@ -1,0 +1,9 @@
+
+kubernetes1.20.0废弃了selfLink解决办法是重新加回来
+
+vi /etc/kubernetes/manifests/kube-apiserver.yaml
+
+## 增加一行
+- --feature-gates=RemoveSelfLink=false
+## 使之生效
+kubectl apply -f /etc/kubernetes/manifests/kube-apiserver.yaml

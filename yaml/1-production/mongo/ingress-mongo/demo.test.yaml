@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongotest
+  # namespace: mongo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongotest
+  template:
+    metadata:
+      labels:
+        app: mongotest
+    spec:
+      containers:
+      - image: registry.cn-hangzhou.aliyuncs.com/aliyunly/aliyun:test.v1
+        imagePullPolicy: IfNotPresent
+        name: mongotest
+      #   volumeMounts:
+      #   - mountPath: /mnt
+      #     name: nfs-pvc
+      # volumes:
+      # - name: nfs-pvc
+      #   persistentVolumeClaim:
+      #     claimName: fast
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-mongo
+  # namespace: mongo
+spec:
+  selector:
+    app: mongotest
+  type: NodePort
+  ports:
+  - name: http
+    port: 1337
+    targetPort: 1337
+---
+# apiVersion: extensions/v1beta1
+# kind: Ingress
+# metadata:
+#   name: ingress-mynginx
+#   # namespace: mongo
+# spec:
+#   rules:
+#   - host: testmongo.com
+#     http:
+#       paths:
+#       - path: /test/v1
+#         backend:
+#           serviceName: service-mongo
+#           servicePort: 1337
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-mynginx
+spec:
+  rules:
+  - host: testmongo.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: /test/v1
+        backend:
+          service:
+            name: service-mongo
+            port:
+              number: 1337
+

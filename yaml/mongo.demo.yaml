@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo403
+  namespace: my-space
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo403
+  template:
+    metadata:
+      labels:
+        app: mongo403
+    spec:
+      containers:
+      - image: mongo:4.0.3
+        imagePullPolicy: IfNotPresent
+        name: mongo403

@@ -1,0 +1,12 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: local-mongo-storage-mongo #根据volumeClaimTemplates命名 pvc格式为 (volumeClaimTemplates Name)-(pod name)-序号
+  namespace: mongo
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+  storageClassName: local-mongo-storage
