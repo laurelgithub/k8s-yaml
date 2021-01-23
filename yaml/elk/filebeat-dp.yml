@@ -25,7 +25,7 @@ items:
       output.elasticsearch:
         hosts: ['es-single:9200']
       logging.level: info        
-- apiVersion: extensions/v1beta1
+- apiVersion: apps/v1
   kind: Deployment 
   metadata:
     name: filebeat
@@ -34,6 +34,9 @@ items:
       kubernetes.io/cluster-service: "true"
   spec:
     replicas: 1
+    selector:
+      matchLabels:
+        app: filebeat
     template:
       metadata:
         name: filebeat
