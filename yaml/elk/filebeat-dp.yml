@@ -46,7 +46,7 @@ items:
           kubernetes.io/cluster-service: "true"
       spec:
         containers:
-        - image: registry.cn-hangzhou.aliyuncs.com/aliyunly/images::docker.elastic.co-beats-filebeat.6.4.0
+        - image: registry.cn-hangzhou.aliyuncs.com/aliyunly/images:docker.elastic.co-beats-filebeat.6.4.0
           name: filebeat
           args: [
             "-c", "/home/filebeat-config/filebeat.yml",
@@ -76,7 +76,7 @@ items:
           - name: filebeat-volume
             configMap:
               name: filebeat-config
-- apiVersion: rbac.authorization.k8s.io/v1beta1
+- apiVersion: rbac.authorization.k8s.io/v1
   kind: ClusterRoleBinding
   metadata:
     name: filebeat
@@ -88,7 +88,7 @@ items:
     kind: ClusterRole
     name: filebeat
     apiGroup: rbac.authorization.k8s.io
-- apiVersion: rbac.authorization.k8s.io/v1beta1
+- apiVersion: rbac.authorization.k8s.io/v1
   kind: ClusterRole
   metadata:
     name: filebeat
