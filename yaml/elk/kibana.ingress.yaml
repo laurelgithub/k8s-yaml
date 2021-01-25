@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-kibana
+  # namespace: monitoring
+spec:
+  rules:
+    - host: www.kibana.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kb-single-svc
+                port:
+                  number: 5601
