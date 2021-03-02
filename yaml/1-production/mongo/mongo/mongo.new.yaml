@@ -70,3 +70,18 @@ spec:
         resources:
           requests:
             storage: 500Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+  namespace: mongo
+  labels:
+    name: mongo
+spec:
+  ports:
+  - port: 27017
+    targetPort: 27017
+  clusterIP: None
+  selector:
+    role: mongo
