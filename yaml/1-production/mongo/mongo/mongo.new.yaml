@@ -13,8 +13,8 @@ spec:
     metadata:
       labels:
         role: mongo
-        environment: test
-        replicaset: rs0
+        environment: pro
+        replicaset: rs1
     spec:
       affinity:
         nodeAffinity:
@@ -34,7 +34,7 @@ spec:
                 - key: replicaset
                   operator: In
                   values:
-                  - rs0
+                  - rs1
               topologyKey: kubernetes.io/hostname
       terminationGracePeriodSeconds: 10
       containers:
@@ -43,21 +43,25 @@ spec:
           command:
             - mongod
             - '--replSet'
-            - rs0
+            - rs1
             - '--bind_ip'
             - 0.0.0.0
-            - '--smallfiles'
-            - '--noprealloc'
+            - '--wiredTigerCacheSizeGB'
+            - '13'
+            - '--logpath'
+            - '/var/log/mongodb/mongodb.log'
           ports:
             - containerPort: 27017
           volumeMounts:
             - name: mongo-persistent-storage
               mountPath: /data/db
+            - name: mongo-log-storage
+              mountPath: /var/log/mongodb
         - name: mongo-sidecar
           image: cvallance/mongo-k8s-sidecar
           env:
             - name: MONGO_SIDECAR_POD_LABELS
-              value: 'role=mongo,environment=test,replicaset=rs0'
+              value: 'role=mongo,environment=pro,replicaset=rs1'
       serviceAccountName: mongodb-sa
   volumeClaimTemplates:
     - metadata:
@@ -70,6 +74,16 @@ spec:
         resources:
           requests:
             storage: 500Mi
+    - metadata:
+        name: mongo-log-storage
+        annotations:
+          volume.beta.kubernetes.io/storage-class: local-mongo-storage
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 100Mi
 ---
 apiVersion: v1
 kind: Service
